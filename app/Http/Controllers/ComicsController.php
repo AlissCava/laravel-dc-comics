@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class ComicsController extends Controller
+use App\Models\Comic;
+
+class ComicController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -13,7 +15,9 @@ class ComicsController extends Controller
      */
     public function index()
     {
-        //
+        $comics = Comic :: all();
+
+        return view('pages.comic.index', compact('comics'));
     }
 
     /**
@@ -23,7 +27,7 @@ class ComicsController extends Controller
      */
     public function create()
     {
-        //
+        return view('pages.comic.create');
     }
 
     /**
@@ -34,7 +38,17 @@ class ComicsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request -> all();
+
+        $comic = new Comic();
+
+        $comic -> title = $data['title'];
+        $comic -> description = $data['description'];
+        $comic -> price = $data['price'];
+
+        $comic -> save();
+
+        return redirect() -> route('comic.show', $comic -> id);
     }
 
     /**
@@ -45,7 +59,9 @@ class ComicsController extends Controller
      */
     public function show($id)
     {
-        //
+        $comic = Comic :: find($id);
+
+        return view('pages.comic.show', compact('comic'));
     }
 
     /**
@@ -56,7 +72,9 @@ class ComicsController extends Controller
      */
     public function edit($id)
     {
-        //
+        $comic = Comic :: find($id);
+
+        return view('pages.comic.edit', compact('comic'));
     }
 
     /**
@@ -68,7 +86,16 @@ class ComicsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $data = $request -> all();
+        $comic = Comic :: find($id);
+
+        $comic -> title = $data['title'];
+        $comic -> description = $data['description'];
+        $comic -> price = $data['price'];
+
+        $comic -> save();
+
+        return redirect() -> route('comic.show', $comic -> id);
     }
 
     /**
@@ -79,6 +106,9 @@ class ComicsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $comic = Comic :: find($id);
+        $comic -> delete();
+
+        return redirect() -> route('comic.index');
     }
 }
