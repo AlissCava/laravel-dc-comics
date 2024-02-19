@@ -112,3 +112,4 @@ class ComicController extends Controller
         return redirect() -> route('comic.index');
     }
 }
+  
